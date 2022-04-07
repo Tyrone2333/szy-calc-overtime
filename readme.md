@@ -10,7 +10,8 @@ szy 工作日加班统计
 1. 打开 OA 系统 - 考勤日历页面 http://oa.szy.cn/sys/portal/page.jsp?j_module=true#j_start=%2Fsys%2Fattend%2Findex.
 jsp&j_target=_iframe&j_path=%2FattendCalendar 
 2. 通过切换月份可获取到原始考勤记录的请求
-3. 控制台运行以下代码
+3. 控制台运行以下代码(根据在职时间自行调整起止日期)
+4. 
 ```js
 fetch("http://oa.szy.cn/sys/attend/sys_attend_main/sysAttendMain.do?method=mycalendar&categoryType=attend&fdStart=2021-01-01+00%3A00&fdEnd=2022-12-31+00%3A00&s_ajax=true", {
     "headers": {
