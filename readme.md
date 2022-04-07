@@ -7,8 +7,7 @@ szy 工作日加班统计
 
 ## 考勤记录
 
-1. 打开 OA 系统 - 考勤日历页面 http://oa.szy.cn/sys/portal/page.jsp?j_module=true#j_start=%2Fsys%2Fattend%2Findex.
-jsp&j_target=_iframe&j_path=%2FattendCalendar 
+1. 打开 OA 系统 - 考勤日历页面 [http://120.36.131.86:8888/sys/portal/page.jsp?j_module=true#j_start=%2Fsys%2Fattend%2Findex.jsp&j_target=_iframe](http://120.36.131.86:8888/sys/portal/page.jsp?j_module=true#j_start=%2Fsys%2Fattend%2Findex.jsp&j_target=_iframe)
 2. 通过切换月份可获取到原始考勤记录的请求
 3. 控制台运行以下代码(根据在职时间自行调整起止日期)
 
