@@ -9,12 +9,15 @@
 <body>
 
 <script>
-    // 加班开始时间
-    const overtimeStartTime = "18:00"
+    // 加班开始时间 2021-10-01 之前为弹性时间
+    const overtimeStartTime = "18:40"
+    // 加班开始时间 2021-10-01 之后为固定班次
+    const overtimeStartTime2 = "18:10"
     // 月工资
     const monthlySalary = 10000
     // 时薪
     const hourlySalary = monthlySalary / 21.75 / 8
+
     fetch('./考勤统计.json', {
         method: 'GET',
         headers: {
@@ -25,29 +28,48 @@
         return response.json()
     }).then(function (data) {
         console.log('原始记录', data)
-        window.document.writeln((JSON.stringify(data)))
 
         // 工作日加班数组
         let workingDayOvertimeList = []
-        workingDayOvertimeList = data.filter((item) => {
+
+        function addOvertimeListItem(item){
+            workingDayOvertimeList.push({
+                "fdId": item.fdId,
+                "start": item.start,
+                "attendTime": item.attendTime,
+                "fdCategoryName": item.fdCategoryName,
+                "creator": item.creator,
+                "overtimeHours": item.overtimeHours,
+            })
+        }
+        data.forEach((item) => {
             // console.log(item)
             let date = item.start.substring(0, 10)
 
             // fdWorkType: 0-上班 1-下班
             // if 下班item && 打卡大于下班时间 && 工作日
-            if (item.fdWorkType === 1 && item.attendTime > overtimeStartTime && [1, 2, 3, 4, 5].includes(new Date(item.start).getDay())) {
+            if (item.fdWorkType === 1 && item.attendTime > "18:00" && [1, 2, 3, 4, 5].includes(new Date(item.start).getDay())) {
                 // 计算加班时长(单位: 小时) 签到时间 - 加班开始时间
-                item.overtimeHours = (new Date('2020 01 01 ' + item.attendTime).getTime() - new Date('2020 01 01 ' + overtimeStartTime).getTime()) / (1000 * 60 * 60)
-                return true
+
+                // 2021-10-01 之后为固定班次 下班时间改为 18:00
+                if (item.fdCategoryName === "厦门固定班次" && item.attendTime > overtimeStartTime2) {
+                    item.overtimeHours = (new Date('2020 01 01 ' + item.attendTime).getTime() - new Date('2020 01 01 ' + overtimeStartTime2).getTime()) / (1000 * 60 * 60)
+                    addOvertimeListItem(item)
+                } else if (item.fdCategoryName === "厦门产研班次" && item.attendTime > overtimeStartTime) {
+                    // 2021-10-01 之前为弹性时间下班时间最晚为 18:30
+                    item.overtimeHours = (new Date('2020 01 01 ' + item.attendTime).getTime() - new Date('2020 01 01 ' + overtimeStartTime).getTime()) / (1000 * 60 * 60)
+                    addOvertimeListItem(item)
+                }
             }
         })
         let count = 0
         workingDayOvertimeList.forEach((item) => {
             count += item.overtimeHours
         })
+        window.document.write(`<pre>${JSON.stringify(workingDayOvertimeList, null, 2)}</pre>`)
 
         console.log('工作日加班数组', workingDayOvertimeList)
-        console.log('加班开始时间', overtimeStartTime)
+        console.log('厦门产研班次加班开始时间', overtimeStartTime,'厦门固定班次加班开始时间', overtimeStartTime2)
         console.log('工作日加班总时长', count)
         console.log(`月工资: ${monthlySalary},日薪: ${monthlySalary / 21.75},时薪: ${hourlySalary}`)
         console.log('工作日加班工资合计(日薪*加班时长*1.5)', hourlySalary * count * 1.5)
