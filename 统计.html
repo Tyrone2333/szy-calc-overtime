@@ -53,11 +53,11 @@
 
                 // 2021-10-01 之后为固定班次 下班时间改为 18:00
                 if (item.fdCategoryName === "厦门固定班次" && item.attendTime > overtimeStartTime2) {
-                    item.overtimeHours = (new Date('2020 01 01 ' + item.attendTime).getTime() - new Date('2020 01 01 ' + overtimeStartTime2).getTime()) / (1000 * 60 * 60)
+                    item.overtimeHours = (new Date('2020 01 01 ' + item.attendTime).getTime() - new Date('2020 01 01 ' + "18:00").getTime()) / (1000 * 60 * 60)
                     addOvertimeListItem(item)
                 } else if (item.fdCategoryName === "厦门产研班次" && item.attendTime > overtimeStartTime) {
                     // 2021-10-01 之前为弹性时间下班时间最晚为 18:30
-                    item.overtimeHours = (new Date('2020 01 01 ' + item.attendTime).getTime() - new Date('2020 01 01 ' + overtimeStartTime).getTime()) / (1000 * 60 * 60)
+                    item.overtimeHours = (new Date('2020 01 01 ' + item.attendTime).getTime() - new Date('2020 01 01 ' + "18:30").getTime()) / (1000 * 60 * 60)
                     addOvertimeListItem(item)
                 }
             }
